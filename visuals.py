@@ -25,7 +25,7 @@ def pca_results(good_data, pca):
 	dimensions = dimensions = ['Dimension {}'.format(i) for i in range(1,len(pca.components_)+1)]
 
 	# PCA components
-	components = pd.DataFrame(np.round(pca.components_, 4), columns = good_data.keys())
+	components = pd.DataFrame(np.round(pca.components_, 4), columns = list(good_data.keys()))
 	components.index = dimensions
 
 	# PCA explained variance
@@ -92,7 +92,6 @@ def biplot(good_data, reduced_data, pca):
                Needs to be a pandas dataframe with valid column names
     reduced_data: the reduced data (the first two dimensions are plotted)
     pca: pca object that contains the components_ attribute
-
     return: a matplotlib AxesSubplot object (for any additional customization)
     
     This procedure is inspired by the script:
@@ -132,7 +131,7 @@ def channel_results(reduced_data, outliers, pca_samples):
 	try:
 	    full_data = pd.read_csv("customers.csv")
 	except:
-	    print "Dataset could not be loaded. Is the file missing?"
+	    print("Dataset could not be loaded. Is the file missing?")       
 	    return False
 
 	# Create the Channel DataFrame
@@ -151,7 +150,7 @@ def channel_results(reduced_data, outliers, pca_samples):
 	grouped = labeled.groupby('Channel')
 	for i, channel in grouped:   
 	    channel.plot(ax = ax, kind = 'scatter', x = 'Dimension 1', y = 'Dimension 2', \
-	                 color = cmap((i-1)*1.0/2), label = labels[i-1], s=30);
+	                 color = cmap((i-1)*1.0/2), label = labels[int(i-1)], s=30);
 	    
 	# Plot transformed sample points   
 	for i, sample in enumerate(pca_samples):
